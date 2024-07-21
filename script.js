@@ -1,15 +1,53 @@
-/* Генерация предсказания должна происходить при клике на кнопку «предсказать судьбу» */
+const clickButton = document.querySelector('.forecast-btn');
+const currentElement = document.querySelector('.current-forecast');
+const currentElementHeader = currentElement.querySelector('h1');
+const currentElementText = currentElement.querySelector('p');
+const elementTemplate = document.querySelector('#forecast-item');
+const forecasts = document.querySelector('.forecasts');
 
-/* Заранее заготовь 3-5 предсказаний и в зависимости от того, как лягут карты судьбы (или что скажет Math.random) показывай их пользователю */
 
-/* Подставляй текст нового предсказания в .current-forecast h1 */
+function clickOnMe() {
 
-/* Показывай процент вероятности, с которым предсказание сбудется — в верстке это .current-forecast p */
+    const predictionNumber = getRandomInt(5);
+    const percentNumber = getRandomInt(101);
 
-/* Данный процент также нужно генерировать автоматически, он может принимать значения от 0 до 100% */
+    makePredictionItem(predictionNumber, percentNumber);
+}
 
-/* Совет: заведи функцию-хелпер, которая будет заниматься только генерацией данных в диапазоне от min до max и используй ее где нужно */
+function getRandomInt(num) {
+    return Math.floor(Math.random() * num);
+}
 
-/* При генерации нового предсказания старое предсказание должно добавляться в начало списка «Мои предсказания» — .forecasts  */
+function makeElementTemplate(number, percent) {
+    const newElement = elementTemplate.content.cloneNode(true);
 
-/* Для добавления предсказания в список воспользуйся шаблоном forecast-item */
+    newElement.querySelector('h3').textContent = number;
+    newElement.querySelector('p').textContent = percent;
+
+    return newElement;
+}
+
+function makePredictionItem(number, percent) {
+
+    if (currentElementHeader.textContent != '') {
+        const forecastsElement = makeElementTemplate(currentElementHeader.textContent, currentElementText.textContent);
+        forecasts.prepend(forecastsElement);
+    }
+
+    if (number == 0) {
+        currentElementHeader.textContent = 'Вы — на верном пути!';
+    } else if (number == 1) {
+        currentElementHeader.textContent = 'То, к чему Вы стремитесь, стоит ваших усилий';
+    } else if (number == 2) {
+        currentElementHeader.textContent = 'Счастье уже стоит за дверью.';
+    } else if (number == 3) {
+        currentElementHeader.textContent = 'Улыбайся! Кто-то сходит с ума от твоей улыбки';
+    } else {
+        currentElementHeader.textContent = 'Поделись с любимым мечтами, и они обязательно сбудутся';
+    }
+
+    currentElementText.textContent = `${percent}%`;
+
+}
+
+clickButton.addEventListener('click', clickOnMe);
